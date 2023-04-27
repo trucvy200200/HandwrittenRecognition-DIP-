@@ -4,6 +4,7 @@ from typing import Tuple, List
 
 import cv2
 import editdistance
+import numpy as np
 from path import Path
 
 from dataloader_iam import DataLoaderIAM, Batch
@@ -177,6 +178,8 @@ def main():
                        'wordbeamsearch': DecoderType.WordBeamSearch}
     decoder_type = decoder_mapping[args.decoder]
 
+    print("decoder", decoder_type)
+
     # train the model
     if args.mode == 'train':
         loader = DataLoaderIAM(args.data_dir, args.batch_size, fast=args.fast)
@@ -208,5 +211,33 @@ def main():
         infer(model, args.img_file)
 
 
-if __name__ == '__main__':
-    main()
+
+def predict(imageArr: list[np.ndarray] = None) -> list[str]:
+  args = parse_args()
+  decoder_mapping = {'bestpath': DecoderType.BestPath,
+                       'beamsearch': DecoderType.BeamSearch,
+                       'wordbeamsearch': DecoderType.WordBeamSearch}
+  decoder_type = decoder_mapping[args.decoder]
+  model = Model(char_list_from_file(), decoder_type, must_restore=True, dump=args.dump)
+  # infer(model, args.img_file)
+
+  # img = cv2.imread(fn_img, cv2.IMREAD_GRAYSCALE)
+
+  extracted = []
+
+  for img in imageArr:
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    assert img is not None
+
+    preprocessor = Preprocessor(get_img_size(), dynamic_width=True, padding=16)
+    img = preprocessor.process_img(img)
+
+    batch = Batch([img], None, 1)
+    recognized, probability = model.infer_batch(batch, True)
+    print(f'Recognized: "{recognized[0]}"')
+    print(f'Probability: {probability[0]}')
+    extracted.append(recognized[0])
+  return extracted
+
+# if __name__ == '__main__':
+#     main()
