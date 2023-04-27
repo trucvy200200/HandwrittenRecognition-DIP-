@@ -99,7 +99,7 @@ class Preprocessor:
         img = img.astype(np.float)
         if self.data_augmentation:
             # photometric data augmentation
-            if random.random() < 0.25:
+            if random.random() < 0.25: 
                 def rand_odd():
                     return random.randint(1, 3) * 2 + 1
                 img = cv2.GaussianBlur(img, (rand_odd(), rand_odd()), 0)
