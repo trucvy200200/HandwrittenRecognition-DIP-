@@ -10,9 +10,27 @@ ex = Extract()
 
 st.set_page_config(layout="wide", page_title="Text Extracter")
 
+names, group = st.columns(2)
+with st.container():
+    with names.expander("Members"):
+        st.write("## Nem - 20110381")
+        st.write("## Who - ________")
+
+    with group.expander("Group __"): # group number here
+        st.write("""Project: Text Extract
+
+Overview:
+A web application that allows users to upload images and extract text from them using optical character recognition (OCR) technology.
+
+Features:
+- User-friendly interface for uploading images and viewing results
+- Fast and accurate OCR model for extracting text from images
+- Secure and reliable hosting on our servers""")
+
+
 st.write("## Extract text from your image")
 st.write(
-    ":dog: Try uploading an image to watch the background magically removed. Full quality images can be downloaded from the sidebar. This code is open source and available [here](https://github.com/tyler-simons/BackgroundRemoval) on GitHub. Special thanks to the [rembg library](https://github.com/danielgatis/rembg) :grin:"
+    ":dog: Try uploading an image to watch the text magically extracted :grin:"
 )
 st.sidebar.write("## Upload and download :gear:")
 
@@ -24,7 +42,7 @@ def convert_image(img):
     byte_im = buf.getvalue()
     return byte_im
 
-
+@st.cache_data
 def fix_image(upload):
 
     print(upload)
@@ -47,7 +65,6 @@ def fix_image(upload):
     col2.image(cropped)
     col2.write(extracted_content)
     st.sidebar.markdown("\n")
-    # st.sidebar.download_button("Download fixed image", convert_image(groups), "fixed.png", "image/png")
 
 
 # hide footer
@@ -60,7 +77,9 @@ footer {visibility: hidden;}
 st.markdown(hide_footer_style, unsafe_allow_html=True)
 
 col1, col2 = st.columns(2)
+
 my_upload = st.sidebar.file_uploader("Upload an image", type=["png", "jpg", "jpeg"])
+
 
 if my_upload is not None:
     fix_image(upload=my_upload)
