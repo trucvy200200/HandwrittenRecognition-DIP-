@@ -106,7 +106,7 @@ class Extract:
 
     def findPeaks(self):
         # Find peaks in histogram
-        self.peaks = np.where(self.hist >= 17)[0]
+        self.peaks = np.where(self.hist >= 2)[0]
 
     def preProcessing(self):
         # self.loadImage()

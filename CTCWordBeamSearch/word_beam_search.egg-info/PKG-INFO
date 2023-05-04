@@ -1,11 +1,6 @@
 Metadata-Version: 2.1
 Name: word-beam-search
 Version: 1.0.1
-Summary: UNKNOWN
 Author: Harald Scheidl
-License: UNKNOWN
-Platform: UNKNOWN
 Requires-Python: >=3.5.0
 License-File: LICENSE.md
-
-UNKNOWN
