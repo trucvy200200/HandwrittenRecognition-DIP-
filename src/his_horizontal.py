@@ -131,10 +131,10 @@ class Extract:
 
     def peakStatisfy(self, cropped_groups: list, avg_dist: float):
         for group in cropped_groups:
-                if (group[1] - group[0]) / avg_dist < 0.35:
-                    return False
+            if (group[1] - group[0]) / avg_dist < 0.35:
+                return False
           
-                return True
+        return True
 
 if __name__ == "__main__":
     # ex = Extract()
