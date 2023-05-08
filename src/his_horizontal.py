@@ -109,10 +109,10 @@ class Extract:
         return cropped_groups
 
     def findPeakParameter(self):
-        for i in range(4, 30):
+        for i in range(15, 4, -1):
             try:
                 self.peaks = np.where(self.hist >= i)[0]
-                groups = self.group_peaks(self.peaks, max_dist=2)
+                groups = self.group_peaks(self.peaks, max_dist=1)
                 cropped_groups = self.crop_peaks(self.img, groups, export=False)
 
                 # Calculate avg distance between peaks
