@@ -13,19 +13,12 @@ st.set_page_config(layout="wide", page_title="Text Extracter")
 names, group = st.columns(2)
 with st.container():
     with names.expander("Members"):
-        st.write("## Nem - 20110381")
-        st.write("## Who - ________")
+        st.write("## Nguyễn Thị Tuyết Mai - 20110381")
+        st.write("## Vũ Hoàng Trúc Vy - 20110415")
+        st.write("## Nguyễn Văn Hơn - 20110371")
 
-    with group.expander("Group __"): # group number here
-        st.write("""Project: Text Extract
+    group.write("Group 3")
 
-Overview:
-A web application that allows users to upload images and extract text from them using optical character recognition (OCR) technology.
-
-Features:
-- User-friendly interface for uploading images and viewing results
-- Fast and accurate OCR model for extracting text from images
-- Secure and reliable hosting on our servers""")
 
 
 st.write("## Extract text from your image")
@@ -42,7 +35,6 @@ def convert_image(img):
     byte_im = buf.getvalue()
     return byte_im
 
-@st.cache_data
 def fix_image(upload):
 
     print(upload)
@@ -55,6 +47,7 @@ def fix_image(upload):
     ex.loadImage(image=imageArr)
     ex.preProcessing()
     groups = ex.group_peaks(ex.peaks, 2)
+
     cropped = ex.crop_peaks(ex.img, groups)
 
     extracted_content = predict(cropped)
@@ -71,6 +64,10 @@ def fix_image(upload):
 hide_footer_style = """
 <style>
 footer {visibility: hidden;}
+div
+{
+    font-size: 14px
+}
 </style>
 """
 

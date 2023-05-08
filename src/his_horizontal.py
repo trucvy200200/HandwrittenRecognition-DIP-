@@ -1,49 +1,8 @@
 import cv2
 import numpy as np
 import os
+from cv2 import Mat
 
-
-
-# display the image with lines
-
-
-# # Draw lines on original image
-# for i, line in enumerate(lines):
-#     x1, y1, x2, y2 = line[0]
-#     print((x2, y2))
-#     #cv2.line(img, (x1, y1), (x2, y2), (0, 255, 0), 3)
-#     line_img = img[y1:y2, x1:x2]  # Crop line from original image
-#     if line_img.any():
-#         cv2.imwrite(f'line_{i}.png', line_img)  # Save cropped line as a new image
-
-
-
-
-
-# def cut_peaks(img, peaks, padding=10):
-#     cropped_images = []
-#     for peak in peaks:
-#         x, y = peak[1], peak[0]
-#         cropped = img[max(0, y-padding):min(img.shape[0], y+padding), max(0, x-padding):min(img.shape[1], x+padding)]
-#         cropped_images.append(cropped)
-#     return cropped_images
-
-# cropped_images = cut_peaks(img, list(zip(peaks, peaks)), padding=20)
-# for i, image in enumerate(cropped_images):
-#     cv2.imwrite(f'cropped_{i}.png', image)
-
-
-# groups = group_peaks(peaks, max_dist=2)
-
-
-
-# crop_peaks(img, groups)
-# draw_peaks()
-
-# Display result
-# cv2.imshow('Result', img)
-# cv2.waitKey(0)
-# cv2.destroyAllWindows()
 
 class Extract:
     def __init__(self) -> None:
@@ -63,11 +22,6 @@ class Extract:
             for file in os.listdir(os.path.join(currentPath, output)):
                 os.remove(os.path.join(currentPath, output, file))
 
-        # if os.path.exists(os.path.join(currentPath, output)):
-        #     # remove this folder
-        #     os.rmdir(os.path.join(currentPath, output))
-
-        # os.mkdir(os.path.join(currentPath, output))
 
         self.outputPath = os.path.join(currentPath, output)
 
@@ -104,9 +58,11 @@ class Extract:
         # Create horizontal histogram
         self.hist = cv2.reduce(self.dilated, 1, cv2.REDUCE_AVG).reshape(-1)
 
-    def findPeaks(self):
+    def findPeaks(self, peakParam: int):
         # Find peaks in histogram
-        self.peaks = np.where(self.hist >= 2)[0]
+        self.peaks = np.where(self.hist >= peakParam)[0]
+        # print("self.peaks", self.peaks)
+
 
     def preProcessing(self):
         # self.loadImage()
@@ -114,7 +70,9 @@ class Extract:
         self.edge()
         self.findLines()
         self.histogram()
-        self.findPeaks()
+        peakParam = self.findPeakParameter()
+        print("peakParam", peakParam)
+        self.findPeaks(peakParam)
         # self.draw_peaks()
 
     # Draw peaks on original image
@@ -134,20 +92,49 @@ class Extract:
         groups.append((current_group[0], current_group[-1]))
         return groups
 
-    def crop_peaks(self, img, groups: list) -> list:
+    def crop_peaks(self, img: Mat, groups: list, export: bool = True) -> list:
 
         cropped_groups = []
 
         for group in groups:
             cropped = img[group[0]:group[1], 0:img.shape[1]]
+
             if cropped.any():
-                outputPath = os.path.join(self.outputPath, f'cropImage-{groups.index(group)}.png')
-
-                cv2.imwrite(outputPath, cropped)
-                cropped_groups.append(cropped)
-
+                if export:
+                    outputPath = os.path.join(self.outputPath, f'cropImage-{groups.index(group)}.png')
+                    cv2.imwrite(outputPath, cropped)
+                    cropped_groups.append(cropped)
+                else:
+                    cropped_groups.append((group[0], group[1]))
         return cropped_groups
 
+    def findPeakParameter(self):
+        for i in range(4, 30):
+            try:
+                self.peaks = np.where(self.hist >= i)[0]
+                groups = self.group_peaks(self.peaks, max_dist=2)
+                cropped_groups = self.crop_peaks(self.img, groups, export=False)
+
+                # Calculate avg distance between peaks
+                sum_dist = 0
+                for group in cropped_groups:
+                    sum_dist += (group[1] - group[0])
+
+                avg_dist = sum_dist / len(cropped_groups)
+
+                if self.peakStatisfy(cropped_groups, avg_dist):
+                    return i
+
+            except Exception as e:
+                print("findPeakParameter", e)
+                continue
+
+    def peakStatisfy(self, cropped_groups: list, avg_dist: float):
+        for group in cropped_groups:
+                if (group[1] - group[0]) / avg_dist < 0.35:
+                    return False
+          
+                return True
 
 if __name__ == "__main__":
     # ex = Extract()
