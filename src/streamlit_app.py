@@ -52,11 +52,13 @@ def fix_image(upload):
 
     extracted_content = predict(cropped)
 
-    extracted_content = "\n".join(extracted_content)
+    # extracted_content = "\n".join(extracted_content)
+    # extracted_content = extracted_content
 
     col2.write("Extracted Image :wrench:")
-    col2.image(cropped)
-    col2.write(extracted_content)
+    col2.image(cropped, caption=extracted_content)
+    # st.image(images_on_page, width=100, caption=indices_on_page)
+    # col2.write(extracted_content)
     st.sidebar.markdown("\n")
 
 
