@@ -35,9 +35,8 @@ class Extract:
 
         if image is not None:
             self.img = image
-        
         self.gray = cv2.cvtColor(self.img, cv2.COLOR_BGR2GRAY)
-
+    
         self.thresh = cv2.threshold(self.gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
 
     def clear(self):
@@ -109,7 +108,7 @@ class Extract:
         return cropped_groups
 
     def findPeakParameter(self):
-        for i in range(4, 30):
+        for i in range(15, 4, -1):
             try:
                 self.peaks = np.where(self.hist >= i)[0]
                 groups = self.group_peaks(self.peaks, max_dist=2)
@@ -131,9 +130,9 @@ class Extract:
 
     def peakStatisfy(self, cropped_groups: list, avg_dist: float):
         for group in cropped_groups:
-            if (group[1] - group[0]) / avg_dist < 0.35:
-                return False
-          
+                if (group[1] - group[0]) / avg_dist < 0.35:
+                    return False
+  
         return True
 
 if __name__ == "__main__":
