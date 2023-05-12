@@ -4,7 +4,6 @@ from PIL import Image
 from io import BytesIO
 from main import predict
 from his_horizontal import Extract
-import base64
 
 ex = Extract()
 
@@ -12,12 +11,13 @@ st.set_page_config(layout="wide", page_title="Text Extracter")
 
 names, group = st.columns(2)
 with st.container():
-    with names.expander("Members"):
-        st.write("## Nguyễn Thị Tuyết Mai - 20110381")
-        st.write("## Vũ Hoàng Trúc Vy - 20110415")
-        st.write("## Nguyễn Văn Hơn - 20110371")
-
-    group.write("Group 3")
+    names.write("## Nguyễn Thị Tuyết Mai - 20110381")
+    names.write("## Vũ Hoàng Trúc Vy - 20110415")
+    names.write("## Nguyễn Văn Hơn - 20110371")
+    new_title = '<p style="font-family:sans-serif; color:Green; font-size: 23px;">Group 3</p>'
+    group.markdown(new_title, unsafe_allow_html=True)
+    new_title2 = '<p style="font-family:sans-serif; color:Red; font-size: 25px;">HANDWRITTEN TEXT RECOGNITION USING IMAGE PROCESSING AND PATTERN RECOGNITION TECHNIQUES</p>'
+    group.markdown(new_title2, unsafe_allow_html=True)
 
 
 
@@ -53,11 +53,10 @@ def fix_image(upload):
     extracted_content = predict(cropped)
 
     # extracted_content = "\n".join(extracted_content)
-    # extracted_content = extracted_content
 
     col2.write("Extracted Image :wrench:")
     col2.image(cropped, caption=extracted_content)
-    # st.image(images_on_page, width=100, caption=indices_on_page)
+    
     # col2.write(extracted_content)
     st.sidebar.markdown("\n")
 
@@ -81,6 +80,9 @@ my_upload = st.sidebar.file_uploader("Upload an image", type=["png", "jpg", "jpe
 
 
 if my_upload is not None:
-    fix_image(upload=my_upload)
+    try:
+        fix_image(upload=my_upload)
+    except:
+        st.warning('Please upload a valid image', icon="⚠️")
 else:
     fix_image("./images/cropImage-0.png")

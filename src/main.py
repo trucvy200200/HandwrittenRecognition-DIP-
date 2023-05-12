@@ -233,6 +233,8 @@ def predict(imageArr: list[np.ndarray] = None) -> list[str]:
     img = preprocessor.process_img(img)
 
     batch = Batch([img], None, 1)
+    
+
     recognized, probability = model.infer_batch(batch, True)
     print(f'Recognized: "{recognized[0]}"')
     print(f'Probability: {probability[0]}')
