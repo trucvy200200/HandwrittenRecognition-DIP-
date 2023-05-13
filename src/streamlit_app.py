@@ -11,7 +11,6 @@ ex = Extract()
 st.set_page_config(layout="wide", page_title="Text Extracter")
 
 def hide_footer():
-  # hide footer
   hide_footer_style = """
   <style>
   footer {visibility: hidden;}
