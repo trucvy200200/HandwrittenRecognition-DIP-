@@ -5,3 +5,5 @@ numpy==1.22
 opencv-python==4.4.0.46
 path==15.0.0
 tensorflow==2.12.0
+editdistance
+pytest
