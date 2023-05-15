@@ -10,18 +10,6 @@ ex = Extract()
 
 st.set_page_config(layout="wide", page_title="Text Extracter")
 
-<< << << < HEAD
-names, group = st.columns(2)
-with st.container():
-    names.write("## Nguyễn Thị Tuyết Mai - 20110381")
-    names.write("## Vũ Hoàng Trúc Vy - 20110415")
-    names.write("## Nguyễn Văn Hơn - 20110371")
-    new_title = '<p style="font-family:sans-serif; color:Green; font-size: 23px;">Group 3</p>'
-    group.markdown(new_title, unsafe_allow_html=True)
-    new_title2 = '<p style="font-family:sans-serif; color:Red; font-size: 25px;">HANDWRITTEN TEXT RECOGNITION USING IMAGE PROCESSING AND PATTERN RECOGNITION TECHNIQUES</p>'
-    group.markdown(new_title2, unsafe_allow_html=True)
-== == == =
-
 
 def hide_footer():
     hide_footer_style = """
@@ -62,6 +50,14 @@ def hide_footer():
   """
     st.markdown(hide_footer_style, unsafe_allow_html=True)
 
+
+st.write("""<div class="sticky"> <div><details> <summary>Team Members</summary>
+<ul class="team-members">
+<li>Nguyễn Thị Tuyết Mai - 20110381</li> 
+<li>Vũ Hoàng Trúc Vy - 20110415</li>
+<li>Nguyễn Văn Hơn - 20110371</li>
+</ul> </details> </div>
+</div>""", unsafe_allow_html=True)
 
 st.write("""<div class="sticky-right"> <div><details> <summary>Group 3</summary>
 <ul class="team-content">
@@ -104,20 +100,10 @@ def fix_image(upload):
 
     extracted_content = predict(cropped)
 
+    col2.write("Extracted Image :wrench:")
+    col2.image(cropped, caption=extracted_content)
 
-<< << << < HEAD
-# extracted_content = "\n".join(extracted_content)
-
-col2.write("Extracted Image :wrench:")
-col2.image(cropped, caption=extracted_content)
-
-# col2.write(extracted_content)
-== == == =
-col2.write("Extracted Image :wrench:")
-col2.image(cropped, caption=extracted_content)
-
->>>>>> > e34651dee3887ac56d8e876ff8d1e8ccacfb256b
-st.sidebar.markdown("\n")
+    st.sidebar.markdown("\n")
 
 
 col1, col2 = st.columns(2)
