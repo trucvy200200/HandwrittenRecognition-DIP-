@@ -1,5 +1,6 @@
 import numpy as np
 import streamlit as st
+import streamlit.components.v1 as components
 from PIL import Image
 from io import BytesIO
 from main import predict
@@ -9,6 +10,7 @@ ex = Extract()
 
 st.set_page_config(layout="wide", page_title="Text Extracter")
 
+<< << << < HEAD
 names, group = st.columns(2)
 with st.container():
     names.write("## Nguyễn Thị Tuyết Mai - 20110381")
@@ -18,8 +20,57 @@ with st.container():
     group.markdown(new_title, unsafe_allow_html=True)
     new_title2 = '<p style="font-family:sans-serif; color:Red; font-size: 25px;">HANDWRITTEN TEXT RECOGNITION USING IMAGE PROCESSING AND PATTERN RECOGNITION TECHNIQUES</p>'
     group.markdown(new_title2, unsafe_allow_html=True)
+== == == =
 
 
+def hide_footer():
+    hide_footer_style = """
+  <style>
+  footer {visibility: hidden;}
+  div
+  {
+      font-size: 14px
+  }
+  div.sticky {
+  position:fixed !important;
+  top: 0 !important;
+  background-color: black !important;
+  margin-top: 2.875rem !important;
+  font-size: 20px;
+  z-index: 100;
+  align-items: center;
+  }
+
+  div.sticky-right {
+  position:fixed !important;
+  top: 0 !important;
+  left: 50vh;
+  background-color: black !important;
+  margin-top: 2.875rem !important;
+  margin-left: 50vh !important;
+  font-size: 20px;
+  z-index: 100;
+  align-items: center;
+  }
+
+  div.sticky .column {
+  flex: 1;
+  padding: 10px;
+  }
+
+  </style>
+  """
+    st.markdown(hide_footer_style, unsafe_allow_html=True)
+
+
+st.write("""<div class="sticky-right"> <div><details> <summary>Group 3</summary>
+<ul class="team-content">
+<li>HANDWRITTEN TEXT RECOGNITION USING IMAGE PROCESSING AND PATTERN RECOGNITION TECHNIQUES</li> 
+</ul> </details> </div>
+</div>""", unsafe_allow_html=True)
+
+
+hide_footer()
 
 st.write("## Extract text from your image")
 st.write(
@@ -34,6 +85,7 @@ def convert_image(img):
     img.save(buf, format="PNG")
     byte_im = buf.getvalue()
     return byte_im
+
 
 def fix_image(upload):
 
@@ -52,31 +104,26 @@ def fix_image(upload):
 
     extracted_content = predict(cropped)
 
-    # extracted_content = "\n".join(extracted_content)
 
-    col2.write("Extracted Image :wrench:")
-    col2.image(cropped, caption=extracted_content)
-    
-    # col2.write(extracted_content)
-    st.sidebar.markdown("\n")
+<< << << < HEAD
+# extracted_content = "\n".join(extracted_content)
 
+col2.write("Extracted Image :wrench:")
+col2.image(cropped, caption=extracted_content)
 
-# hide footer
-hide_footer_style = """
-<style>
-footer {visibility: hidden;}
-div
-{
-    font-size: 14px
-}
-</style>
-"""
+# col2.write(extracted_content)
+== == == =
+col2.write("Extracted Image :wrench:")
+col2.image(cropped, caption=extracted_content)
 
-st.markdown(hide_footer_style, unsafe_allow_html=True)
+>>>>>> > e34651dee3887ac56d8e876ff8d1e8ccacfb256b
+st.sidebar.markdown("\n")
+
 
 col1, col2 = st.columns(2)
 
-my_upload = st.sidebar.file_uploader("Upload an image", type=["png", "jpg", "jpeg"])
+my_upload = st.sidebar.file_uploader(
+    "Upload an image", type=["png", "jpg", "jpeg"])
 
 
 if my_upload is not None:
